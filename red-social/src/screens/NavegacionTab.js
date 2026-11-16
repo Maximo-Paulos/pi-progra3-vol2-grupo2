@@ -1,6 +1,7 @@
 import { Text } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { FontAwesome } from '@expo/vector-icons';
+import { auth } from '../firebase/config';
 
 const Tab = createBottomTabNavigator();
 
@@ -14,6 +15,10 @@ function Perfil() {
 
 function NuevoPosteo() {
   return <Text>Nuevo posteo</Text>;
+}
+
+function CerrarSesion() {
+  auth.signOut();
 }
 
 function NavegacionTab() {
@@ -39,7 +44,16 @@ function NavegacionTab() {
           )
         }}
       />
+
+      <Tab.Screen name="Logout" component={CerrarSesion} options={{
+          tabBarIcon: () => (
+            <FontAwesome name="plus" size={24} color="black" />
+          )
+        }}
+      />
     </Tab.Navigator>
+    
+    
   );
 }
 

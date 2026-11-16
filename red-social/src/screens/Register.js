@@ -11,7 +11,8 @@ function Register(props) {
 
     function register() {
         setError('');
-
+        
+        
         if (username === '') {
             setError('El nombre de usuario es obligatorio.');
             return;
