@@ -10,37 +10,29 @@ function Register(props) {
     const [error, setError] = useState('');
 
     function register() {
-        setError('');
-        
-        
-        if (username === '') {
-            setError('El nombre de usuario es obligatorio.');
-            return;
-        }
-
-        if (email === '') {
-            setError('El email es obligatorio.');
-            return;
-        }
-
-        if (password === '') {
-            setError('La contraseña es obligatoria.');
-            return;
-        }
-
-        auth.createUserWithEmailAndPassword(email, password)
-            .then(() => {
-                return db.collection('users').add({
-                    email: email,
-                    username: username,
+        if (email.length === 0) {
+            setError('El email es obligatorio');
+        } else if (username.length === 0) {
+            setError('El nombre de usuario es obligatorio');
+        } else if (password.length === 0) {
+            setError('La password es obligatoria');
+        } else {
+            auth.createUserWithEmailAndPassword(email, password)
+                .then(response => {
+                    db.collection('users').add({
+                        email: auth.currentUser.email,
+                        username: username,
+                    })
+                        .then(() => {
+                            auth.signOut();
+                            props.navigation.navigate('Login');
+                        })
+                        .catch(e => console.log(e));
+                })
+                .catch(error => {
+                    setError('Error de Firebase: ' + error);
                 });
-            })
-            .then(() => {
-                return auth.signOut();
-            })
-            .catch((errorFirebase) => {
-                setError('Error de Firebase: ' + errorFirebase);
-            });
+        }
     }
 
     return (
@@ -70,7 +62,7 @@ function Register(props) {
                 value={password}
             />
 
-            {error !== '' && <Text>{error}</Text>}
+            <Text>{error}</Text>
 
             <Pressable onPress={() => register()}>
                 <Text>Registrarme</Text>
