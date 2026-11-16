@@ -7,6 +7,13 @@ function Login(props) {
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState('');
 
+useEffect(() => {
+    auth.onAuthStateChanged((usuarioFirebase) => {
+      if(usuarioFirebase){
+        props.navigation.navigate("NavegacionTab")
+      }
+    });
+  }, []);
 
   function onSubmit() {
     if (email.length === 0) {
