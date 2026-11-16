@@ -13,7 +13,7 @@ function Login(props) {
         props.navigation.navigate('HomeMenu');
       }
     });
-  }, []);
+  });
 
   function onSubmit() {
     if (email.length === 0) {
