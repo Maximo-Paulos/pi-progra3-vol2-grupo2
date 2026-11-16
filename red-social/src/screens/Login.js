@@ -7,13 +7,6 @@ function Login(props) {
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState('');
 
-  useEffect(() => {
-    auth.onAuthStateChanged(user => {
-      if (user) {
-        props.navigation.navigate('HomeMenu');
-      }
-    });
-  });
 
   function onSubmit() {
     if (email.length === 0) {
