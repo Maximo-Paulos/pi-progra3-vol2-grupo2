@@ -3,7 +3,7 @@ import { FlatList } from 'react-native';
 import { db } from '../firebase/config';
 import Posteo from '../components/posteos';
 
-function Inicio() {
+function Inicio(props) {
   const [posteos, setPosteos] = useState([]);
 
   useEffect(() => {
@@ -27,7 +27,9 @@ function Inicio() {
     <FlatList
       data={posteos}
       keyExtractor={(item) => item.id}
-      renderItem={({ item }) => <Posteo posteo={item} />}
+      renderItem={({ item }) => (
+      <Posteo posteo={item} navigation={props.navigation} />
+      )}
     />
   );
 }

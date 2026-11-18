@@ -51,9 +51,22 @@ function Posteo(props) {
           {usuarioYaDioLike ? '♥' : '♡'} {cantidadLikes} likes
         </Text>
       </Pressable>
+
+
+      <Pressable
+        onPress={() =>
+          props.navigation.navigate('Comentarios', {
+            idPosteo: props.posteo.id,
+          })
+        }
+      >
+        <Text>Comentar</Text>
+      </Pressable>
     </View>
+
   );
 }
+
 
 const styles = StyleSheet.create({
   card: {

@@ -1,20 +1,43 @@
 import { Text } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { FontAwesome } from '@expo/vector-icons';
 import { auth } from '../firebase/config';
+
+
 import Perfil  from './perfil';
 import NuevoPosteo from './NuevoPosteo';
 import Inicio from './inicio';
+import Comentarios from './Comentarios';
 
 const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
+
+function InicioStack() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="InicioFeed"
+        component={Inicio}
+        options={{ title: 'Inicio' }}
+      />
+      <Stack.Screen
+        name="Comentarios"
+        component={Comentarios}
+        options={{ title: 'Comentarios' }}
+      />
+    </Stack.Navigator>
+  );
+}
 
 function NavegacionTab() {
   return (
     <Tab.Navigator>
       <Tab.Screen
         name="Inicio"
-        component={Inicio}
+        component={InicioStack}
         options={{
+          headerShown: false,
           tabBarIcon: () => (
             <FontAwesome name="home" size={24} color="black" />
           ),
