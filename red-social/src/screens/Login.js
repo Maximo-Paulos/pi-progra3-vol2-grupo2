@@ -7,10 +7,10 @@ function Login(props) {
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState('');
 
-useEffect(() => {
+  useEffect(() => {
     auth.onAuthStateChanged((usuarioFirebase) => {
-      if(usuarioFirebase){
-        props.navigation.navigate("NavegacionTab")
+      if (usuarioFirebase) {
+        props.navigation.navigate('NavegacionTab');
       }
     });
   }, []);
@@ -23,7 +23,6 @@ useEffect(() => {
     } else {
       auth.signInWithEmailAndPassword(email, password)
         .then(response => {
-          props.navigation.navigate('HomeMenu');
         })
         .catch(error => {
           setLoginError('Credenciales incorrectas');
@@ -34,21 +33,30 @@ useEffect(() => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Login</Text>
-      <TextInput style={styles.field}
-        keyboardType='email-address'
-        placeholder='email'
-        onChangeText={text => setEmail(text)}
-        value={email} />
-      <TextInput style={styles.field}
-        keyboardType='default'
-        placeholder='password'
+
+      <TextInput
+        style={styles.field}
+        keyboardType="email-address"
+        placeholder="email"
+        onChangeText={(text) => setEmail(text)}
+        value={email}
+      />
+
+      <TextInput
+        style={styles.field}
+        keyboardType="default"
+        placeholder="password"
         secureTextEntry={true}
-        onChangeText={text => setPassword(text)}
-        value={password} />
+        onChangeText={(text) => setPassword(text)}
+        value={password}
+      />
+
       <Pressable style={styles.button} onPress={() => onSubmit()}>
         <Text style={styles.buttonText}>Ingresar</Text>
       </Pressable>
+
       <Text>{loginError}</Text>
+
       <Pressable onPress={() => props.navigation.navigate('Register')}>
         <Text>¿No tenés cuenta? Registrate</Text>
       </Pressable>

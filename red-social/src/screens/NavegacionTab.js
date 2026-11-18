@@ -3,47 +3,44 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { FontAwesome } from '@expo/vector-icons';
 import { auth } from '../firebase/config';
 import Perfil  from './perfil';
+import NuevoPosteo from './NuevoPosteo';
+import Inicio from './inicio';
 
 const Tab = createBottomTabNavigator();
-
-function Inicio() {
-  return <Text>Inicio</Text>;
-}
-
-
-function NuevoPosteo() {
-  return <Text>Nuevo posteo</Text>;
-}
-
-
 
 function NavegacionTab() {
   return (
     <Tab.Navigator>
-      <Tab.Screen name="Inicio" component={Inicio} options={{
+      <Tab.Screen
+        name="Inicio"
+        component={Inicio}
+        options={{
           tabBarIcon: () => (
             <FontAwesome name="home" size={24} color="black" />
-          )
+          ),
         }}
       />
 
-      <Tab.Screen name="Perfil" component={Perfil} options={{
+      <Tab.Screen
+        name="Perfil"
+        component={Perfil}
+        options={{
           tabBarIcon: () => (
             <FontAwesome name="user" size={24} color="black" />
-          )
+          ),
         }}
       />
 
-      <Tab.Screen name="Nuevo posteo" component={NuevoPosteo} options={{
+      <Tab.Screen
+        name="Nuevo posteo"
+        component={NuevoPosteo}
+        options={{
           tabBarIcon: () => (
             <FontAwesome name="plus" size={24} color="black" />
-          )
+          ),
         }}
       />
-
     </Tab.Navigator>
-    
-    
   );
 }
 
