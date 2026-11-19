@@ -37,6 +37,10 @@ function Comentarios(props) {
   return (
     <View style={ styles.container }>
       <Text style={ styles.title }>Comentarios</Text>
+      <View style={ styles.posteo }>
+        <Text style={ styles.owner }>{ props.route.params.posteo.owner }</Text>
+        <Text style={ styles.description }>{ props.route.params.posteo.description }</Text>
+      </View>   
       <FlatList
         data={ comentarios }
         renderItem={ ({ item }) => <Text>{ item.data.owner }: { item.data.texto }</Text> }
@@ -60,6 +64,21 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
+  },
+  posteo: {
+    backgroundColor: '#ffffff',
+    borderWidth: 1,
+    borderColor: '#777777',
+    borderRadius: 12,
+    padding: 14,
+    marginVertical: 12,
+  },
+  owner: {
+    fontSize: 14,
+    marginBottom: 8,
+  },
+  description: {
+    fontSize: 16,
   },
   field: {
     paddingVertical: 15,

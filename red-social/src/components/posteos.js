@@ -40,7 +40,7 @@ function Posteo(props) {
           <Text>Me gusta</Text>
         </Pressable>
       }
-      <Pressable onPress={() => props.navigation.navigate('Comentarios', { idPosteo: props.posteo.id })}>
+      <Pressable onPress={() => props.navigation.navigate('Comentarios', { idPosteo: props.posteo.id, posteo: props.posteo.data })}>
         <Text>Comentar</Text>
       </Pressable>
     </View>
