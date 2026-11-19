@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { View, FlatList } from 'react-native';
+import { View, FlatList, StyleSheet } from 'react-native';
 import { db } from '../firebase/config';
 import Posteo from '../components/posteos';
 
@@ -22,7 +22,7 @@ function Inicio(props) {
   }, []);
 
   return (
-    <View>
+    <View style={styles.container}>
       <FlatList
         data={posteos}
         renderItem={({ item }) => <Posteo posteo={item} navigation={props.navigation} />}
@@ -30,5 +30,11 @@ function Inicio(props) {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
 
 export default Inicio;
