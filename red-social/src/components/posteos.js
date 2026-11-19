@@ -1,72 +1,51 @@
-import { useEffect, useState } from 'react';
 import firebase from 'firebase';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { auth, db } from '../firebase/config';
 
 function Posteo(props) {
-  const [nombreUsuario, setNombreUsuario] = useState('');
-  const likes = props.posteo.data.likes || [];
-  const cantidadLikes = likes.length;
-  let usuarioYaDioLike = false;
+  const likeado = props.posteo.data.likes.includes(auth.currentUser.email);
 
-  useEffect(() => {
-    db.collection('users')
-      .where('email', '==', props.posteo.data.owner)
-      .onSnapshot((docs) => {
-        docs.forEach((doc) => {
-          setNombreUsuario(doc.data().username);
-        });
-      });
-  }, []);
 
-  likes.forEach((email) => {
-    if (email === auth.currentUser.email) {
-      usuarioYaDioLike = true;
-    }
-  });
-
-  function actualizarLike() {
-    const cambioLike = usuarioYaDioLike
-      ? firebase.firestore.FieldValue.arrayRemove(auth.currentUser.email)
-      : firebase.firestore.FieldValue.arrayUnion(auth.currentUser.email);
-
+  function like() {
     db.collection('posts')
       .doc(props.posteo.id)
-      .update({ likes: cambioLike })
-      .catch((error) => console.log(error));
+      .update({
+        likes: firebase.firestore.FieldValue.arrayUnion(auth.currentUser.email)
+      })
+      .then(() => {
+      });
+  }
+
+  function quitarLike() {
+    db.collection('posts')
+      .doc(props.posteo.id)
+      .update({
+        likes: firebase.firestore.FieldValue.arrayRemove(auth.currentUser.email)
+      })
+      .then(() => {
+      });
   }
 
   return (
     <View style={styles.card}>
-      <Text style={styles.owner}>
-        {nombreUsuario || 'Cargando usuario...'}
-      </Text>
-
-      <Text style={styles.description}>
-        {props.posteo.data.description}
-      </Text>
-
-      <Pressable onPress={() => actualizarLike()}>
-        <Text style={styles.likes}>
-          {usuarioYaDioLike ? '♥' : '♡'} {cantidadLikes} likes
-        </Text>
-      </Pressable>
-
-
-      <Pressable
-        onPress={() =>
-          props.navigation.navigate('Comentarios', {
-            idPosteo: props.posteo.id,
-          })
-        }
-      >
+      <Text style={styles.owner}>{props.posteo.data.owner}</Text>
+      <Text style={styles.description}>{props.posteo.data.description}</Text>
+      <Text style={styles.likes}>Likes: {props.posteo.data.likes.length}</Text>
+      {likeado ?
+        <Pressable onPress={() => quitarLike()}>
+          <Text>Me gusta</Text>
+        </Pressable>
+        :
+        <Pressable onPress={() => like()}>
+          <Text>Me gusta</Text>
+        </Pressable>
+      }
+      <Pressable onPress={() => props.navigation.navigate('Comentarios', { idPosteo: props.posteo.id })}>
         <Text>Comentar</Text>
       </Pressable>
     </View>
-
   );
 }
-
 
 const styles = StyleSheet.create({
   card: {

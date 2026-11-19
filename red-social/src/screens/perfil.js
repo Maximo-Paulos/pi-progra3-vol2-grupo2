@@ -1,24 +1,62 @@
-import React from 'react';
-import { Text, Pressable, StyleSheet } from 'react-native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { FontAwesome } from '@expo/vector-icons';
-import { auth } from '../firebase/config';
-
+import { useState, useEffect } from 'react';
+import { View, Text, Pressable, FlatList, StyleSheet } from 'react-native';
+import { auth, db } from '../firebase/config';
 
 function Perfil(props) {
-  function CerrarSesion() {
+  const [usuarios, setUsuarios] = useState([]);
+  const [posteos, setPosteos] = useState([]);
+
+  useEffect(() => {
+    db.collection('users')
+      .where('email', '==', auth.currentUser.email)
+      .onSnapshot(docs => {
+        let lista = [];
+        docs.forEach(doc => {
+          lista.push({
+            id: doc.id,
+            data: doc.data(),
+          });
+        });
+        setUsuarios(lista);
+      });
+
+    db.collection('posts')
+      .where('owner', '==', auth.currentUser.email)
+      .onSnapshot(docs => {
+        let lista = [];
+        docs.forEach(doc => {
+          lista.push({
+            id: doc.id,
+            data: doc.data(),
+          });
+        });
+        setPosteos(lista);
+      });
+  }, []);
+
+  function cerrarSesion() {
     auth.signOut();
     props.navigation.navigate('Login');
   }
 
   return (
-    <React.Fragment>
-      <Text>Perfil</Text>
-      <Pressable style={styles.button} onPress={() => CerrarSesion()}>
-        <Text style={styles.buttonText}>Cerrar sesion</Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>Mi Perfil</Text>
+      <FlatList
+        data={usuarios}
+        renderItem={({ item }) => <Text>Usuario: {item.data.username}</Text>}
+      />
+      <Text>Email: {auth.currentUser.email}</Text>
+      <Text style={styles.subtitle}>Mis posteos</Text>
+      <FlatList
+        data={posteos}
+        renderItem={({ item }) => <Text style={styles.posteo}>{item.data.description}</Text>}
+      />
+      <Pressable style={styles.button} onPress={() => cerrarSesion()}>
+        <Text style={styles.buttonText}>Cerrar sesión</Text>
       </Pressable>
-    </React.Fragment>
-  )
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -30,14 +68,16 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
   },
-  field: {
-    paddingVertical: 15,
-    paddingHorizontal: 10,
+  subtitle: {
+    fontSize: 18,
+    marginTop: 20,
+  },
+  posteo: {
     borderWidth: 1,
     borderColor: '#ccc',
-    borderStyle: 'solid',
     borderRadius: 6,
-    marginVertical: 10,
+    padding: 10,
+    marginVertical: 5,
   },
   button: {
     backgroundColor: '#28a745',
@@ -50,4 +90,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
 export default Perfil;

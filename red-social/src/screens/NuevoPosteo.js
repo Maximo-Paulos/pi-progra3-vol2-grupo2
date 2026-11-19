@@ -1,50 +1,27 @@
-import { useEffect, useState } from 'react';
-import {Pressable,StyleSheet,Text,TextInput,View,} from 'react-native';
+import { useState } from 'react';
+import { Pressable, StyleSheet, Text, TextInput, View, } from 'react-native';
 import { auth, db } from '../firebase/config';
 
-function nuevoposteo() {
+function NuevoPosteo() {
     const [descripcion, setDescripcion] = useState('');
     const [mensaje, setMensaje] = useState('');
-    const [nombreUsuario, setNombreUsuario] = useState('');
-
-    useEffect(() => {
-        db.collection('users')
-            .where('email', '==', auth.currentUser.email)
-            .onSnapshot((docs) => {
-                docs.forEach((doc) => {
-                    setNombreUsuario(doc.data().username || '');
-                });
-            });
-    }, []);
 
     function publicarPosteo() {
-        setMensaje('');
-
         if (descripcion.length === 0) {
-            setMensaje('Escribí una descripción.');
-            return;
-        }
-
-        if (nombreUsuario.length === 0) {
-            setMensaje('Esperá a que cargue tu nombre de usuario e intentá de nuevo.');
-            return;
-        }
-
-        db.collection('posts')
-            .add({
+            setMensaje('Escribí una descripción');
+        } else {
+            db.collection('posts').add({
                 owner: auth.currentUser.email,
-                username: nombreUsuario,
                 description: descripcion,
                 createdAt: Date.now(),
                 likes: [],
             })
-            .then(() => {
-                setDescripcion('');
-                setMensaje('Post publicado.');
-            })
-            .catch(() => {
-                setMensaje('No se pudo guardar el post.');
-            });
+                .then(() => {
+                    setDescripcion('');
+                    setMensaje('Posteo publicado');
+                })
+                .catch(e => console.log(e));
+        }
     }
 
     return (
@@ -58,7 +35,7 @@ function nuevoposteo() {
                 value={descripcion}
             />
 
-            {mensaje !== '' && <Text style={styles.message}>{mensaje}</Text>}
+            <Text style={styles.message}>{mensaje}</Text>
 
             <Pressable
                 style={styles.button}
@@ -103,4 +80,5 @@ const styles = StyleSheet.create({
     },
 });
 
-export default nuevoposteo;
+
+export default NuevoPosteo;
