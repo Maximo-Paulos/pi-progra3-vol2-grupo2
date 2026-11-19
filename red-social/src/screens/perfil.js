@@ -1,25 +1,24 @@
 import React from 'react';
-import { Text, Pressable, StyleSheet} from 'react-native';
+import { Text, Pressable, StyleSheet } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { FontAwesome } from '@expo/vector-icons';
 import { auth } from '../firebase/config';
 
 
+function Perfil(props) {
+  function CerrarSesion() {
+    auth.signOut();
+    props.navigation.navigate('Login');
+  }
 
-function Perfil() {
-  
-function CerrarSesion() {
-  auth.signOut();
-}
-
-    return (
+  return (
     <React.Fragment>
-            <Text>Perfil</Text>
-            <Pressable style={styles.button} onPress={() => CerrarSesion()}>
+      <Text>Perfil</Text>
+      <Pressable style={styles.button} onPress={() => CerrarSesion()}>
         <Text style={styles.buttonText}>Cerrar sesion</Text>
       </Pressable>
-          </React.Fragment>
-      )
+    </React.Fragment>
+  )
 }
 
 const styles = StyleSheet.create({
